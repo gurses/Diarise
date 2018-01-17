@@ -17,7 +17,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var artistArray = [String]()
     var imageArray = [UIImage]()
     var dateArray = [String]()
-    
+    var textArray = [String]()
     
     
     var selectedPainting = ""
@@ -27,7 +27,9 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = UIColor.orange
+        
+            
+        
         tableView.delegate = self
         tableView.dataSource = self
         getInfo()
@@ -44,6 +46,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             artistArray.remove(at: indexPath.row)
             imageArray.remove(at: indexPath.row)
             dateArray.remove(at: indexPath.row)
+            textArray.remove(at: indexPath.row)
             tableView.deleteRows(at:[indexPath], with: UITableViewRowAnimation.fade)
             self.tableView.reloadData()
         }
@@ -55,6 +58,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         yearArray.removeAll(keepingCapacity: false)
         imageArray.removeAll(keepingCapacity: false)
         artistArray.removeAll(keepingCapacity: false)
+        textArray.removeAll(keepingCapacity: false)
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
@@ -70,6 +74,9 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 for result in results as![NSManagedObject]{
                     if let name = result.value(forKey: "name") as? String{
                         self.nameArray.append(name)
+                    }
+                    if let text = result.value(forKey: "text") as? String{
+                        self.textArray.append(text)
                     }
                     if let date = result.value(forKey: "date") as? String{
                         self.dateArray.append(date)
@@ -102,7 +109,9 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel?.text=(dateArray[indexPath.row])
+        var txt = "\(artistArray[indexPath.row])"
+        txt = txt + " --> " +  ( dateArray[indexPath.row])
+        cell.textLabel?.text = txt
         return cell
     }
     
